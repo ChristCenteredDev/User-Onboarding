@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 const FormComponent = props => {
   const { values, touched, errors } = props;
@@ -46,7 +47,19 @@ const FormikForm = withFormik({
     tos: Yup.boolean()
       .oneOf([true], 'Needed')
       .required()
-  })
+  }),
+
+  handleSubmit(values, { resetForm }) {
+    axios
+      .post('https://reqres.in/api/users', values)
+      .then(res => {
+        console.log(res);
+        resetForm();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 })(FormComponent);
 
 export default FormikForm;
